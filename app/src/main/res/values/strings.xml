@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NMN</string>
+
+    <string name="vaccinations">Vaccinations</string>
+    <string name="show_favorite_only">Show favorite only</string>
+    <string name="full_vaccinated_text">Fully:&#160;</string>
+    <string name="partially_vaccinated_text">Partially:&#160;</string>
+    <string name="number_and_percent">%,d -> %d%%</string>
+    <string name="no_data">NO DATA</string>
+</resources>
