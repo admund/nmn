@@ -9,10 +9,11 @@ import kotlinx.coroutines.launch
 import me.admund.nmn.data.api.VaccinesApi
 import me.admund.nmn.data.db.CountriesDao
 import me.admund.nmn.data.db.CountryDbEntity
+import java.io.IOException
 
 interface CountryRepository {
     fun countries(): Flow<List<Country>>
-    fun fetchCountries(coroutineScope: CoroutineScope)
+    fun fetchCountries(coroutineScope: CoroutineScope, onIoExceptionListener: (Throwable) -> Unit)
     fun updateCountryFavoriteStatus(coroutineScope: CoroutineScope, uid: Long)
 }
 
@@ -29,10 +30,16 @@ class CountryRepositoryImpl(
         }
     }
 
-    override fun fetchCountries(coroutineScope: CoroutineScope) {
+    override fun fetchCountries(
+        coroutineScope: CoroutineScope,
+        onIoExceptionListener: (Throwable) -> Unit
+    ) {
         val handler = CoroutineExceptionHandler { _, exception ->
-            // TODO something
-            Log.e("ZXC", "CoroutineExceptionHandler got $exception")
+            Log.e("NMN", "CoroutineExceptionHandler got $exception")
+            when (exception) {
+                is IOException -> onIoExceptionListener(exception)
+                else -> throw exception
+            }
         }
 
         coroutineScope.launch(handler) {

@@ -2,12 +2,14 @@ package me.admund.nmn.ui.main
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import me.admund.nmn.R
 import me.admund.nmn.databinding.ActivityMainBinding
 import me.admund.nmn.di.ViewModelProviderFactory
 import org.koin.android.ext.android.inject
@@ -44,6 +46,20 @@ class MainActivity : AppCompatActivity() {
             Log.e("ZXC", "MainActivity: country: ${list.size}")
             countriesAdapter.submitList(list)
         }.launchIn(lifecycleScope)
+        viewModel.errors().onEach { error ->
+            when (error) {
+                MainViewModelError.None -> Unit
+                MainViewModelError.FetchCountriesIOException -> showToast()
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun showToast() {
+        Toast.makeText(
+            this,
+            getString(R.string.fetch_data_error_toast),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun isShowOnlyFavorites() =

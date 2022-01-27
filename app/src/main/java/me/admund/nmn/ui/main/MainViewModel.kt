@@ -15,6 +15,7 @@ class MainViewModel(
 ) : ViewModel() {
 
     private val countriesStateFlow = MutableStateFlow<List<Country>>(emptyList())
+    private val errorsStateFlow = MutableStateFlow<MainViewModelError>(MainViewModelError.None)
     private var showOnlyFavorite = false
     private var cachedList: List<Country> = emptyList()
 
@@ -23,10 +24,14 @@ class MainViewModel(
             cachedList = list
             countriesStateFlow.value = filteredList(list)
         }.launchIn(viewModelScope)
-        countryRepository.fetchCountries(viewModelScope)
+        countryRepository.fetchCountries(viewModelScope) {
+            errorsStateFlow.value = MainViewModelError.FetchCountriesIOException
+        }
     }
 
     fun countries(): Flow<List<Country>> = countriesStateFlow
+
+    fun errors(): Flow<MainViewModelError> = errorsStateFlow
 
     fun updateCountryFavoriteStatus(uid: Long) {
         countryRepository.updateCountryFavoriteStatus(viewModelScope, uid)
@@ -41,5 +46,10 @@ class MainViewModel(
     private fun filteredList(list: List<Country>) = when (showOnlyFavorite) {
         true -> list.filter { it.isFavorite }
         false -> list
-    }
+    }.let { return@let if (it.isEmpty()) list else it }
+}
+
+sealed class MainViewModelError {
+    object None : MainViewModelError()
+    object FetchCountriesIOException : MainViewModelError()
 }

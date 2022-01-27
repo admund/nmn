@@ -7,4 +7,5 @@
     <string name="partially_vaccinated_text">Partially:&#160;</string>
     <string name="number_and_percent">%,d -> %d%%</string>
     <string name="no_data">NO DATA</string>
+    <string name="fetch_data_error_toast">Can\'t fetch data - internet connection issue</string>
 </resources>
