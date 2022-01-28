@@ -14,7 +14,7 @@ import java.io.IOException
 interface CountryRepository {
     fun countries(): Flow<List<Country>>
     fun fetchCountries(coroutineScope: CoroutineScope, onIoExceptionListener: (Throwable) -> Unit)
-    fun updateCountryFavoriteStatus(coroutineScope: CoroutineScope, uid: Long)
+    fun swapCountryFavoriteStatus(coroutineScope: CoroutineScope, uid: Long)
 }
 
 class CountryRepositoryImpl(
@@ -24,7 +24,6 @@ class CountryRepositoryImpl(
     private var countryList = emptyList<Country>()
 
     override fun countries(): Flow<List<Country>> = countriesDao.queryAllCountries().map { list ->
-        Log.e("ZXC", "CountryRepository: list: ${list.size}")
         list.map { it.toCountry() }.also {
             countryList = it
         }
@@ -61,14 +60,13 @@ class CountryRepositoryImpl(
                 )
             }
             checkIfAdministeredCanBeUid(result)
-            Log.e("ZXC", "fetchCountries: ${result.size}")
             if (countriesDao.updateAll(result) == 0) {
                 countriesDao.insertAll(result)
             }
         }
     }
 
-    override fun updateCountryFavoriteStatus(coroutineScope: CoroutineScope, uid: Long) {
+    override fun swapCountryFavoriteStatus(coroutineScope: CoroutineScope, uid: Long) {
         countryList.find { country -> country.uid == uid }
             ?.let { country ->
                 coroutineScope.launch {

@@ -20,14 +20,4 @@ interface CountriesDao {
 
     @Query("select * from countries order by name asc")
     fun queryAllCountries(): Flow<List<CountryDbEntity>>
-
-
-//    @Query("select title from goals where uid = :goalUid")
-//    fun getGoalTitle(goalUid: Long): String
-//
-//    @Query("select * from goals order by uid asc")
-//    fun getAllGoalEntities(): Flow<List<GoalEntity>>
-//
-//    @Query("select * from goals where type = :goalType order by uid asc")
-//    fun getFilteredGoalEntities(goalType: GoalType): Flow<List<GoalEntity>>
 }

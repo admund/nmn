@@ -1,8 +1,8 @@
 package me.admund.nmn.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -11,7 +11,8 @@ import me.admund.nmn.domain.Country
 import me.admund.nmn.domain.CountryRepository
 
 class MainViewModel(
-    private val countryRepository: CountryRepository
+    private val countryRepository: CountryRepository,
+    private val testCoroutineScope: CoroutineScope? = null
 ) : ViewModel() {
 
     private val countriesStateFlow = MutableStateFlow<List<Country>>(emptyList())
@@ -23,8 +24,8 @@ class MainViewModel(
         countryRepository.countries().onEach { list ->
             cachedList = list
             countriesStateFlow.value = filteredList(list)
-        }.launchIn(viewModelScope)
-        countryRepository.fetchCountries(viewModelScope) {
+        }.launchIn(scope)
+        countryRepository.fetchCountries(scope) {
             errorsStateFlow.value = MainViewModelError.FetchCountriesIOException
         }
     }
@@ -33,15 +34,17 @@ class MainViewModel(
 
     fun errors(): Flow<MainViewModelError> = errorsStateFlow
 
-    fun updateCountryFavoriteStatus(uid: Long) {
-        countryRepository.updateCountryFavoriteStatus(viewModelScope, uid)
+    fun swapCountryFavoriteStatus(uid: Long) {
+        countryRepository.swapCountryFavoriteStatus(scope, uid)
     }
 
     fun showOnlyFavorite(showOnlyFavorite: Boolean) {
-        Log.e("ZXC", "showOnlyFavorite: $showOnlyFavorite")
         this.showOnlyFavorite = showOnlyFavorite
         countriesStateFlow.value = filteredList(cachedList)
     }
+
+    private val scope: CoroutineScope
+        get() = testCoroutineScope ?: viewModelScope
 
     private fun filteredList(list: List<Country>) = when (showOnlyFavorite) {
         true -> list.filter { it.isFavorite }

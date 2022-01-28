@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val countriesAdapter = CountriesAdapter { uid ->
-            viewModel.updateCountryFavoriteStatus(uid)
+            viewModel.swapCountryFavoriteStatus(uid)
         }
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.countries().onEach { list ->
-            Log.e("ZXC", "MainActivity: country: ${list.size}")
             countriesAdapter.submitList(list)
         }.launchIn(lifecycleScope)
         viewModel.errors().onEach { error ->

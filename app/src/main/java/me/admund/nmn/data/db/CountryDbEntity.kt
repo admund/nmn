@@ -5,13 +5,13 @@ import androidx.room.PrimaryKey
 import me.admund.nmn.domain.Country
 
 @Entity(tableName = "countries")
-class CountryDbEntity(
+data class CountryDbEntity(
     @PrimaryKey(autoGenerate = false) val uid: Long,
     val name: String,
-    val isFavorite: Boolean,
     val population: Long,
     val peopleVaccinated: Long,
-    val peoplePartiallyVaccinated: Long
+    val peoplePartiallyVaccinated: Long,
+    val isFavorite: Boolean
 ) {
     fun toCountry() = Country(
         uid = uid,
