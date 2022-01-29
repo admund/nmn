@@ -17,5 +17,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - name: Run test
+      - name: Run Unit Tests
         run: ./gradlew test
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          cmd: ./gradlew connectedAndroidTest
+          api: 23
+          tag: default
+          abi: x86

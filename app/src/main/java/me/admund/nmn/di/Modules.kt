@@ -14,13 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
     single { ViewModelProviderFactory(get()) }
-//    single {
-//        Room.databaseBuilder(
-//            androidApplication(),
-//            GoalsDatabase::class.java,
-//            GoalsDatabase.DATABASE_NAME
-//        ).build().goalsDao()
-//    }
     single<CountryRepository> { CountryRepositoryImpl(get(), get()) }
 }
 
