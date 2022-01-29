@@ -5,7 +5,7 @@
     <string name="show_favorite_only">Show favorite only</string>
     <string name="full_vaccinated_text">Fully:&#160;</string>
     <string name="partially_vaccinated_text">Partially:&#160;</string>
-    <string name="number_and_percent">%,d -> %d%%</string>
+    <string name="number_and_percent" translatable="false">%,d -> %d%%</string>
     <string name="no_data">NO DATA</string>
     <string name="fetch_data_error_toast">Can\'t fetch data - internet connection issue</string>
 </resources>

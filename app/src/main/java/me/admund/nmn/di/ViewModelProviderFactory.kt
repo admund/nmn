@@ -20,5 +20,5 @@ class ViewModelProviderFactory(
 }
 
 class NoViewModelException(viewModelName: String) :
-    RuntimeException("No View Model: $viewModelName")
+    RuntimeException("No ViewModel: $viewModelName")
 
