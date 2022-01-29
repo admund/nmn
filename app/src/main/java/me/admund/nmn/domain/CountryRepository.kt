@@ -45,7 +45,7 @@ class CountryRepositoryImpl(
             val result = mutableListOf<CountryDbEntity>()
             vaccinesApi.vaccines().onEach { countryEntry ->
                 val countryName = countryEntry.key
-                val vaccineEntity = countryEntry.value["All"]
+                val vaccineEntity = countryEntry.value[ALL_KEY]
                 val uid = vaccineEntity?.administered ?: -1
                 result.add(
                     CountryDbEntity(
@@ -93,6 +93,7 @@ class CountryRepositoryImpl(
     }
 
     companion object {
+        const val ALL_KEY = "All"
         const val NO_DATA = -1L
     }
 }

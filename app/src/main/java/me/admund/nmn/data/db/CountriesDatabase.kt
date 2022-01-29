@@ -4,7 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(entities = [CountryDbEntity::class], version = 1)
-//    @TypeConverters(Converter::class)
 abstract class CountriesDatabase : RoomDatabase() {
     abstract fun countriesDao(): CountriesDao
 

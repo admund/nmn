@@ -72,7 +72,7 @@ class CountriesAdapter(
     }
 
     private fun getPercent(value: Long, population: Long): Int {
-        if (value == 0L) return 0
+        if (value == 0L || population == 0L) return 0
         return (value.toDouble() / population * 100).roundToInt()
     }
 }

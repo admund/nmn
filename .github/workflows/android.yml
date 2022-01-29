@@ -8,7 +8,7 @@ on:
 
 jobs:
   ut-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -17,5 +17,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - name: Run test
+      - name: Run Unit Tests
         run: ./gradlew test
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          script: ./gradlew connectedAndroidTest
+          api-level: 29

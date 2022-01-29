@@ -1,20 +1,18 @@
 package me.admund.nmn.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import me.admund.nmn.EspressoIdleResourceHandler
 import me.admund.nmn.R
 import me.admund.nmn.databinding.ActivityMainBinding
 import me.admund.nmn.di.ViewModelProviderFactory
 import org.koin.android.ext.android.inject
 
-@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private val factory: ViewModelProviderFactory by inject()
@@ -42,8 +40,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        EspressoIdleResourceHandler.increment()
         viewModel.countries().onEach { list ->
-            countriesAdapter.submitList(list)
+            countriesAdapter.submitList(list) {
+                if (list.isNotEmpty()) EspressoIdleResourceHandler.decrement()
+            }
         }.launchIn(lifecycleScope)
         viewModel.errors().onEach { error ->
             when (error) {
