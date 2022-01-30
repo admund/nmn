@@ -16,14 +16,14 @@ import org.junit.Test
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
-class CountryRepositoryTest {
+class CountriesRepositoryTest {
 
     private val testScope = TestCoroutineScope()
     private val vaccinesApi = mockk<VaccinesApi>()
     private val countriesDao = mockk<CountriesDao>()
     private val onIoExceptionListener = mockk<(Throwable) -> Unit>()
 
-    private val tested: CountryRepository = CountryRepositoryImpl(vaccinesApi, countriesDao)
+    private val tested: CountriesRepository = CountriesRepositoryImpl(vaccinesApi, countriesDao)
 
     @Test
     fun `test if insertAll() is not invoked when some rows was updated`() {
@@ -88,7 +88,7 @@ class CountryRepositoryTest {
         mockQueryAllCountries(countryDbEntityList)
 
         tested.countries().launchIn(testScope)
-        tested.swapCountryFavoriteStatus(testScope, 3)
+        tested.swapCountryIsFavorite(testScope, 3)
 
         coVerify(exactly = 1) { countriesDao.update(favoriteUid3CountryDbEntity) }
     }

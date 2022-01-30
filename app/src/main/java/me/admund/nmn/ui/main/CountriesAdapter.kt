@@ -12,7 +12,7 @@ import me.admund.nmn.domain.Country
 import kotlin.math.roundToInt
 
 class CountriesAdapter(
-    val onClickStarListener: (Long) -> Unit
+    val onStarClickListener: (Long) -> Unit
 ) : ListAdapter<Country, CountryViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
@@ -44,7 +44,7 @@ class CountriesAdapter(
                     false -> android.R.drawable.star_big_off
                 }
             )
-            favoriteImageView.setOnClickListener { onClickStarListener(item.uid) }
+            favoriteImageView.setOnClickListener { onStarClickListener(item.uid) }
         }
     }
 

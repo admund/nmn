@@ -4,8 +4,8 @@ import androidx.room.Room
 import com.google.gson.GsonBuilder
 import me.admund.nmn.data.api.VaccinesApi
 import me.admund.nmn.data.db.CountriesDatabase
-import me.admund.nmn.domain.CountryRepository
-import me.admund.nmn.domain.CountryRepositoryImpl
+import me.admund.nmn.domain.CountriesRepository
+import me.admund.nmn.domain.CountriesRepositoryImpl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
     single { ViewModelProviderFactory(get()) }
-    single<CountryRepository> { CountryRepositoryImpl(get(), get()) }
+    single<CountriesRepository> { CountriesRepositoryImpl(get(), get()) }
 }
 
 val roomModule = module {

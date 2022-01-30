@@ -8,24 +8,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.admund.nmn.domain.Country
-import me.admund.nmn.domain.CountryRepository
+import me.admund.nmn.domain.CountriesRepository
 
 class MainViewModel(
-    private val countryRepository: CountryRepository,
+    private val countriesRepository: CountriesRepository,
     private val testCoroutineScope: CoroutineScope? = null
 ) : ViewModel() {
 
     private val countriesStateFlow = MutableStateFlow<List<Country>>(emptyList())
     private val errorsStateFlow = MutableStateFlow<MainViewModelError>(MainViewModelError.None)
     private var showOnlyFavorite = false
-    private var cachedList: List<Country> = emptyList()
+    private var cachedCountriesList: List<Country> = emptyList()
 
     init {
-        countryRepository.countries().onEach { list ->
-            cachedList = list
-            countriesStateFlow.value = filteredList(list)
+        countriesRepository.countries().onEach { list ->
+            cachedCountriesList = list
+            countriesStateFlow.value = filteredCountriesList(list)
         }.launchIn(scope)
-        countryRepository.fetchCountries(scope) {
+        countriesRepository.fetchCountries(scope) {
             errorsStateFlow.value = MainViewModelError.FetchCountriesIOException
         }
     }
@@ -34,22 +34,22 @@ class MainViewModel(
 
     fun errors(): Flow<MainViewModelError> = errorsStateFlow
 
-    fun swapCountryFavoriteStatus(uid: Long) {
-        countryRepository.swapCountryFavoriteStatus(scope, uid)
+    fun swapCountryIsFavorite(uid: Long) {
+        countriesRepository.swapCountryIsFavorite(scope, uid)
     }
 
     fun showOnlyFavorite(showOnlyFavorite: Boolean) {
         this.showOnlyFavorite = showOnlyFavorite
-        countriesStateFlow.value = filteredList(cachedList)
+        countriesStateFlow.value = filteredCountriesList(cachedCountriesList)
     }
 
-    private val scope: CoroutineScope
-        get() = testCoroutineScope ?: viewModelScope
-
-    private fun filteredList(list: List<Country>) = when (showOnlyFavorite) {
+    private fun filteredCountriesList(list: List<Country>) = when (showOnlyFavorite) {
         true -> list.filter { it.isFavorite }
         false -> list
     }.let { return@let if (it.isEmpty()) list else it }
+
+    private val scope: CoroutineScope
+        get() = testCoroutineScope ?: viewModelScope
 }
 
 sealed class MainViewModelError {

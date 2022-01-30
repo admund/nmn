@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import me.admund.nmn.domain.Country
-import me.admund.nmn.domain.CountryRepository
-import me.admund.nmn.ui.main.MainViewModel
+import me.admund.nmn.domain.CountriesRepository
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +19,7 @@ class MainViewModelTest {
     private lateinit var tested: MainViewModel
 
     private val testScope = TestCoroutineScope()
-    private val countryRepository = mockk<CountryRepository>()
+    private val countryRepository = mockk<CountriesRepository>()
 
     @Before
     fun setup() {

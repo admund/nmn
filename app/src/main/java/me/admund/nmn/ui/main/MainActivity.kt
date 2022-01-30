@@ -1,10 +1,12 @@
 package me.admund.nmn.ui.main
 
 import android.os.Bundle
+import android.widget.LinearLayout.VERTICAL
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.admund.nmn.EspressoIdleResourceHandler
@@ -23,12 +25,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val countriesAdapter = CountriesAdapter { uid ->
-            viewModel.swapCountryFavoriteStatus(uid)
+            viewModel.swapCountryIsFavorite(uid)
         }
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
 
-            countriesRecyclerView.adapter = countriesAdapter
+            countriesRecyclerView.apply {
+                adapter = countriesAdapter
+                addItemDecoration(DividerItemDecoration(context, VERTICAL))
+            }
 
             val isShowOnlyFavorites = isShowOnlyFavorites()
             showFavoritesOnlyCheckBox.isChecked = isShowOnlyFavorites
